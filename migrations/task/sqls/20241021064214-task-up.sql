@@ -39,7 +39,9 @@ WHERE "email" = 'opacity0@hexschooltest.io';
 SELECT COUNT(*) AS user_count
 FROM "USER";
 -- 1-5 查詢：取得 USER 資料表所有用戶資料，並列出前 3 筆（提示：使用limit語法）
-
+SELECT *
+FROM "USER"
+LIMIT 3;
 
 --  ████████  █████   █    ████  
 --    █ █   ██    █  █         █ 

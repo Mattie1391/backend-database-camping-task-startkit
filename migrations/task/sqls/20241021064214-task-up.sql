@@ -106,38 +106,32 @@ insert into "COACH" (user_id, experience_years) values
     -- 1. 所有教練都有 `重訓` 專長
     -- 2. 教練`肌肉棒子` 需要有 `瑜伽` 專長
     -- 3. 教練`Q太郎` 需要有 `有氧運動` 與 `復健訓練` 專長
-CREATE TABLE "COACH_LINK_SKILL" (
-  "id" serial PRIMARY KEY,
-  "coach_id" uuid NOT NULL REFERENCES "COACH"("id") ON DELETE CASCADE,
-  "skill_name" varchar(50) NOT NULL,
-  "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  UNIQUE("coach_id", "skill_name") -- 防止同一教練重複添加同一專長
+INSERT INTO "COACH_LINK_SKILL" (coach_id, skill_id) VALUES
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'lee2000@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '重訓')
+),
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'muscle@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '重訓')
+),
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'starplatinum@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '重訓')
+),
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'muscle@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '瑜伽')
+),
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'starplatinum@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '有氧運動')
+),
+(
+  (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'starplatinum@hexschooltest.io')),
+  (SELECT id FROM "SKILL" WHERE name = '復健訓練')
 );
 
--- 取得教練 ID
-WITH coach_ids AS (
-  SELECT 
-    c.id AS coach_id,
-    u.name AS coach_name
-  FROM "COACH" c
-  JOIN "USER" u ON c.user_id = u.id
-  WHERE u.name IN ('肌肉棒子', 'Q太郎', '李燕容')
-)
-
--- 插入專長資料
-INSERT INTO "COACH_LINK_SKILL" ("coach_id", "skill_name")
-VALUES
-  -- 所有教練都有 "重訓" 專長
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = '肌肉棒子'), '重訓'),
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = 'Q太郎'), '重訓'),
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = '李燕容'), '重訓'),
-  
-  -- "肌肉棒子" 的 "瑜伽" 專長
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = '肌肉棒子'), '瑜伽'),
-  
-  -- "Q太郎" 的 "有氧運動" 與 "復健訓練" 專長
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = 'Q太郎'), '有氧運動'),
-  ((SELECT coach_id FROM coach_ids WHERE coach_name = 'Q太郎'), '復健訓練');
 
 -- 3-3 修改：更新教練的經驗年數，資料需求如下：
     -- 1. 教練`肌肉棒子` 的經驗年數為3年

@@ -226,6 +226,12 @@ and course_id = (select id from "COURSE" where user_id = (select id from "USER" 
     -- 1. 預約人設為`王小明`
     -- 2. 預約時間`booking_at` 設為2024-11-24 17:10:25
     -- 3. 狀態`status` 設定為即將授課
+insert into "COURSE_BOOKING" (user_id, course_id, booking_at, status) values
+((select id from "USER" where email = 'wXlTq@hexschooltest.io'),
+  (select id from "COURSE" where user_id = (select id from "USER" where email = 'lee2000@hexschooltest.io')),
+  '2024-11-24 17:10:25',
+  '即將授課');
+
 
 -- 5-4. 查詢：取得王小明所有的預約紀錄，包含取消預約的紀錄
 

@@ -158,6 +158,16 @@ VALUES
 -- 3-3 修改：更新教練的經驗年數，資料需求如下：
     -- 1. 教練`肌肉棒子` 的經驗年數為3年
     -- 2. 教練`Q太郎` 的經驗年數為5年
+UPDATE "COACH"
+SET "experience_years" = 
+  CASE 
+    WHEN "user_id" = (SELECT id FROM "USER" WHERE name = '肌肉棒子') THEN 3
+    WHEN "user_id" = (SELECT id FROM "USER" WHERE name = 'Q太郎') THEN 5
+    ELSE "experience_years"
+  END
+WHERE "user_id" IN (
+  SELECT id FROM "USER" WHERE name IN ('肌肉棒子', 'Q太郎')
+);
 
 -- 3-4 刪除：新增一個專長 空中瑜伽 至 SKILL 資料表，之後刪除此專長。
 

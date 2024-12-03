@@ -170,7 +170,18 @@ WHERE "user_id" IN (
 );
 
 -- 3-4 刪除：新增一個專長 空中瑜伽 至 SKILL 資料表，之後刪除此專長。
-
+--SKILL資料表結構
+CREATE TABLE "SKILL" (
+  "id" serial PRIMARY KEY,
+  "skill_name" varchar(50) NOT NULL UNIQUE,
+  "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+);
+--新增專長 空中瑜伽
+INSERT INTO "SKILL" ("skill_name")
+VALUES ('空中瑜伽');
+--刪除專長 空中瑜伽
+DELETE FROM "SKILL"
+WHERE "skill_name" = '空中瑜伽';
 
 --  ████████  █████   █    █   █ 
 --    █ █   ██    █  █     █   █ 

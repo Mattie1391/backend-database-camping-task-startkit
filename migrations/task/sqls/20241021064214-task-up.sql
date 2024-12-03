@@ -200,6 +200,32 @@ WHERE "skill_name" = '空中瑜伽';
     -- 6. 最大授課人數`max_participants` 設定為10
     -- 7. 授課連結設定`meeting_url`為 https://test-meeting.test.io
 
+--建立COURSE資料表
+CREATE TABLE "COURSE" (
+  "id" serial PRIMARY KEY,
+  "coach_id" uuid NOT NULL REFERENCES "COACH"("id") ON DELETE CASCADE,
+  "skill_id" serial NOT NULL REFERENCES "SKILL"("id") ON DELETE CASCADE,
+  "name" varchar(100) NOT NULL,
+  "start_at" timestamp NOT NULL,
+  "end_at" timestamp NOT NULL,
+  "max_participants" integer NOT NULL,
+  "meeting_url" varchar(2048),
+  "created_at" timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+);
+--新增課程內容
+INSERT INTO "COURSE" (
+  "coach_id", "skill_id", "name", "start_at", "end_at", "max_participants", "meeting_url"
+)
+VALUES (
+  (SELECT c.id FROM "COACH" c JOIN "USER" u ON c.user_id = u.id WHERE u.name = '李燕容'),
+  (SELECT id FROM "SKILL" WHERE skill_name = '重訓'),
+  '重訓基礎課',
+  '2024-11-25 14:00:00',
+  '2024-11-25 16:00:00',
+  10,
+  'https://test-meeting.test.io'
+);
+
 
 -- ████████  █████   █    █████ 
 --   █ █   ██    █  █     █     

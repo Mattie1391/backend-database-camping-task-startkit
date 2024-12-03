@@ -275,7 +275,38 @@ group by "COURSE_BOOKING".user_id;
     -- from ( 用戶王小明的購買堂數 ) as "CREDIT_PURCHASE"
     -- inner join ( 用戶王小明的已使用堂數) as "COURSE_BOOKING"
     -- on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id;
-
+select 
+	a.用戶編號
+	,a.用戶姓名
+        ,a.購買總堂數
+	,b.已使用堂數
+	,(a.購買總堂數 - b.已使用堂數) as "剩餘可用堂數" 
+from
+(
+	select 
+	   u.id as "用戶編號"
+	   ,u.email as "用戶信箱"
+       ,u.name as "用戶姓名"
+      ,sum(cpur.purchased_credits) as "購買總堂數"
+	FROM "CREDIT_PURCHASE" as "cpur"
+	 	INNER JOIN "USER" as "u" 
+		 	on cpur.user_id = u.id
+	group by u.id,u.email,u.name
+) as "a"
+inner join 
+(
+	SELECT 
+		u.id as "用戶編號"
+		,u.email as "用戶信箱"
+		,u.name as "預約人名稱"
+		,count(join_at) as "已使用堂數"
+	FROM "COURSE_BOOKING" as "cb"
+		inner join "USER" as "u"
+			on cb.user_id = u.id
+	where join_at is not null
+	group by u.id,u.email,u.name
+) as "b"
+	on a.用戶編號 = b.用戶編號 and a.用戶信箱 = 'wXlTq@hexschooltest.io';
 
 -- ████████  █████   █     ███  
 --   █ █   ██    █  █     █     
